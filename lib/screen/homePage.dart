@@ -20,6 +20,7 @@ class _homePageState extends State<homePage> {
   DateTime? iDate;
   DateTime? fDate;
   Duration? deltaDate;
+  double? acceleration;
 
 
   @override
@@ -37,10 +38,12 @@ class _homePageState extends State<homePage> {
         deltaSpeed = fSpeed - iSpeed;
 
         // it's the law to calc acceleration but the problem is i can't convert duration
-       //double acceleration = deltaSpeed / deltaDate ;
+
+        //Done i did it after 13Minutes, lol
+       acceleration = deltaSpeed / deltaDate!.inSeconds;
 
         print("$fDate" + "$iDate" + "Delta Time" + " $deltaDate " + "s");
-        print("$fSpeed" + " $iSpeed" + "Delta Speed" + " $deltaSpeed " + "m");
+        print("$fSpeed" + " $iSpeed" + "Delta Speed" + " $deltaSpeed " + "m" + "$acceleration");
 
         fSpeed = 0;
         dX = 0;
@@ -50,47 +53,43 @@ class _homePageState extends State<homePage> {
       onPanUpdate: (DragUpdateDetails details) {
         dX = details.delta.dx;
         dY = details.delta.dy;
+        dX *= (dX < 0 ? -1 : 1);
+        dY *= (dY < 0 ? -1 : 1);
 
         fDate = DateTime.now();
         fSpeed = sqrt(pow(dX, 2) + pow(dY, 2));
 
-        dX *= (dX < 0 ? -1 : 1);
-        dY *= (dY < 0 ? -1 : 1);
         setState(() {
           end = iSpeed;
         });
       },
       child: Scaffold(
         body: SafeArea(
-          child: Row(
+          child: Column(
             children: [
-              Column(
-                children: [
-                  Expanded(
-                      child: RoundedMeter(
-                    name: "Speed",
-                    value: fSpeed,
-                    end: () {
-                      Restart(end);
-                    },
-                  )),
-                  Expanded(
-                      child: RoundedMeter(
-                          name: "DX",
-                          value: dX,
-                          end: () {
-                            Restart(end);
-                          })),
-                  Expanded(
-                      child: RoundedMeter(
-                          name: "DY",
-                          value: dY,
-                          end: () {
-                            Restart(end);
-                          })),
-                  Expanded(child: Text("acceleration=Δv/Δt=  " + "fdf" + " m/s^2"))
-                ],
-              ),
+              Expanded(
+                  child: RoundedMeter(
+                name: "Speed",
+                value: fSpeed,
+                end: () {
+                  Restart(end);
+                },
+              )),
+              Expanded(
+                  child: RoundedMeter(
+                      name: "DX",
+                      value: dX,
+                      end: () {
+                        Restart(end);
+                      })),
+              Expanded(
+                  child: RoundedMeter(
+                      name: "DY",
+                      value: dY,
+                      end: () {
+                        Restart(end);
+                      })),
+              Expanded(child: Text("acceleration=Δv/Δt=  " + "$acceleration" + " m/s^2"))
             ],
           ),
         ),
