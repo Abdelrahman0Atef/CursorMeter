@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class RoundedMeter extends StatelessWidget {
-
-  RoundedMeter({required String this.name, required double this.value,required Function this.end});
+  RoundedMeter(
+      {required String this.name,
+      required double this.value,
+      required Function this.end});
 
   double? value;
   String? name;
@@ -29,7 +31,9 @@ class RoundedMeter extends StatelessWidget {
             ],
             pointers: [
               NeedlePointer(
-                onValueChangeEnd: (value){end;},
+                onValueChangeEnd: (value) {
+                  end;
+                },
                 enableAnimation: true,
                 value: value!,
               )
@@ -51,4 +55,3 @@ class RoundedMeter extends StatelessWidget {
         ]);
   }
 }
-
